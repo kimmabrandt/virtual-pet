@@ -1,15 +1,15 @@
 angular.module("VirtualPetApp")
 .service("ApplicationService", ["$http", "$rootScope", function($http, $rootScope) {
   this.gameLoopInterval = null;
-  this.stats = {};  
+  this.stats = {};
   this.msPerHour = 1000 * 60 * 60;
 
   // constants
   this.actionInfos = {
       sleep: {
-        msUntilMissed: 30000,
+        msUntilMissed: 360000,
         // 10 * this.msPerHour
-        msSleeping: 20000,
+        msSleeping: 180000,
         // msUntilMissed: 5 * this.msPerHour,
         moodDeltas: {
             missed: 0,
@@ -22,7 +22,7 @@ angular.module("VirtualPetApp")
       },
       feed: {
           // msUntilNeeded: 4 * this.msPerHour,
-          msUntilMissed: 30000,
+          msUntilMissed: 120000,
           // msUntilMissed: 5 * this.msPerHour,
           moodDeltas: {
               missed: -20,
@@ -35,7 +35,7 @@ angular.module("VirtualPetApp")
       },
       clean: {
         // msUntilNeeded: 4 * this.msPerHour,
-        msUntilMissed: 40000,
+        msUntilMissed: 300000,
         // msUntilMissed: 5 * this.msPerHour,
         moodDeltas: {
             missed: 0,
@@ -48,7 +48,7 @@ angular.module("VirtualPetApp")
       },
       exercise: {
         // msUntilNeeded: 4 * this.msPerHour,
-        msUntilMissed: 60000,
+        msUntilMissed: 240000,
         // msUntilMissed: 5 * this.msPerHour,
         moodDeltas: {
             missed: -20,
@@ -63,7 +63,7 @@ angular.module("VirtualPetApp")
         // msUntilNeeded: 4 * this.msPerHour,
         msUntilMissed: 24 * this.msPerHour,
         // msUntilMissed: 5 * this.msPerHour,
-        msUntilAvailable: 30000,
+        msUntilAvailable: 180000,
         moodDeltas: {
             missed: 0,
             acted: 0,
@@ -74,7 +74,7 @@ angular.module("VirtualPetApp")
         }
       }
   }
-  
+
   this.getStats = function() {
       return $http({
           url: "/api/users/stats",
@@ -155,12 +155,12 @@ angular.module("VirtualPetApp")
         el.className ="c3-sleep-anim";
       }
       document.getElementById('left-nav').style.visibility = "hidden";
-      document.getElementById('right-nav').style.visibility = "hidden";  
+      document.getElementById('right-nav').style.visibility = "hidden";
     }
     else {
       document.getElementById('left-nav').style.visibility = "visible";
       document.getElementById('right-nav').style.visibility = "visible";
-    }  
+    }
 
     // check if time for activity has expired
     var isTimeExpired = false;
@@ -168,7 +168,7 @@ angular.module("VirtualPetApp")
       isTimeExpired = true;
     }
 
-    var lastTime = this.stats[index].last; 
+    var lastTime = this.stats[index].last;
 
     this.applyUpdates(activity, actedOrMissed, isTimeExpired, lastTime, login);
 
@@ -214,7 +214,7 @@ angular.module("VirtualPetApp")
               this.species = res.data.pet.species;
         }.bind(this));
     }
-    
+
     if (isTimeExpired) {
 
       // determine deltas
@@ -257,8 +257,8 @@ angular.module("VirtualPetApp")
           this.species = res.data.pet.species;
         }.bind(this))
       }.bind(this));
-      
-      
+
+
     }
 
     // reset sleeping
@@ -342,5 +342,5 @@ angular.module("VirtualPetApp")
     } else {
         el.className ="c3-default-anim";
     }
-  }.bind(this);  
+  }.bind(this);
 }]);
